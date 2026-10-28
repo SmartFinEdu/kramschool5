@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Краматорська загальноосвітня школа І-ІІІ ступенів №5</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#1e40af',
+                            darkBlue: '#1e3a8a',
+                            lightBlue: '#3b82f6',
+                            yellow: '#eab308',
+                            gold: '#ca8a04',
+                            accent: '#0284c7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* High Contrast & Accessibility Modes */
+        body.high-contrast { background-color: #9CC5D6 !important; color: #000000 !important; }
+        body.high-contrast * { background-color: transparent !important; color: #000000 !important; border-color: #000000 !important; }
+        body.high-contrast .bg-brand-blue, body.high-contrast .bg-brand-darkBlue, body.high-contrast .bg-blue-900, body.high-contrast .bg-slate-900 { background-color: #000000 !important; color: #ffffff !important; }
+        body.high-contrast .bg-brand-blue *, body.high-contrast .bg-brand-darkBlue *, body.high-contrast .bg-blue-900 *, body.high-contrast .bg-slate-900 * { color: #ffffff !important; }
+        body.inversion { background-color: #000000 !important; color: #ffffff !important; filter: invert(100%); }
+        body.inversion img { filter: invert(100%); }
+        body.hide-images img { display: none !important; }
+        body.grayscale-images img { filter: grayscale(100%); }
+        body.fs-large { font-size: 1.15rem; }
+        body.fs-xlarge { font-size: 1.3rem; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen transition-all duration-200" id="body-root">
+
+    <!-- ADMIN TOP BAR (Visible when logged in) -->
+    <div id="admin-bar" class="hidden bg-slate-900 text-white px-4 py-2 border-b border-amber-500 text-xs flex justify-between items-center z-50">
+        <div class="flex items-center space-x-3">
+            <span class="bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded text-[10px] uppercase">CMS Панель</span>
+            <span>Ви увійшли як <strong id="admin-user-display" class="text-amber-400">Адміністратор</strong></span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+            <button onclick="openModal('add-news-modal')" class="bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-plus mr-1"></i> Новина
+            </button>
+            <button onclick="openAddAnnouncement()" class="bg-blue-600 hover:bg-blue-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-bullhorn mr-1"></i> Оголошення
+            </button>
+            <button onclick="openModal('manage-vp-modal')" class="bg-fuchsia-600 hover:bg-fuchsia-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-users mr-1"></i> Завучі
+            </button>
+            <button onclick="openModal('manage-tabs-modal')" class="bg-purple-600 hover:bg-purple-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-folder-plus mr-1"></i> Вкладки
+            </button>
+            <button onclick="openModal('manage-nav-modal')" class="bg-indigo-600 hover:bg-indigo-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-bars-staggered mr-1"></i> Меню
+            </button>
+            <button onclick="openModal('manage-links-modal')" class="bg-teal-600 hover:bg-teal-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-link mr-1"></i> Ресурси
+            </button>
+            <button onclick="openSettingsModal()" class="bg-orange-600 hover:bg-orange-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-sliders mr-1"></i> Налаштування
+            </button>
+            <button onclick="logoutAdmin()" class="bg-rose-600 hover:bg-rose-700 px-2.5 py-1 rounded text-white font-medium flex items-center transition">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Вийти
+            </button>
+        </div>
+    </div>
+
+    <!-- ACCESSIBILITY PANEL -->
+    <div id="accessibility-panel" class="hidden bg-slate-900 text-white py-4 px-4 border-b border-slate-700 shadow-xl transition-all">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-sm">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-universal-access text-brand-yellow text-xl"></i>
+                <span class="font-bold uppercase tracking-wider">Панель комфортного читання</span>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-6">
+                <!-- Color Contrast -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400">Контраст:</span>
+                    <button onclick="setTheme('normal')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs border border-slate-600">Звичайний</button>
+                    <button onclick="setTheme('high-contrast')" class="px-2 py-1 bg-sky-300 text-slate-900 font-bold rounded text-xs">Високий</button>
+                    <button onclick="setTheme('inversion')" class="px-2 py-1 bg-black text-white border border-white rounded text-xs">Інверсія</button>
+                </div>
+
+                <!-- Font Size -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400">Шрифт:</span>
+                    <button onclick="setFontSize('normal')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs border border-slate-600">A</button>
+                    <button onclick="setFontSize('large')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-sm border border-slate-600 font-bold">A+</button>
+                    <button onclick="setFontSize('xlarge')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-base border border-slate-600 font-black">A++</button>
+                </div>
+
+                <!-- Images Mode -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400">Зображення:</span>
+                    <button onclick="setImagesMode('normal')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs border border-slate-600"><i class="fa-regular fa-image"></i></button>
+                    <button onclick="setImagesMode('grayscale')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs border border-slate-600">Ч/Б</button>
+                    <button onclick="setImagesMode('hide')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs border border-slate-600">Приховати</button>
+                </div>
+
+                <!-- Reset Button -->
+                <button onclick="resetAccessibility()" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Скинути
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <!-- Top Bar -->
+        <div class="bg-brand-darkBlue text-white text-xs py-2 px-4 border-b border-blue-900">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+                <div class="flex items-center space-x-6">
+                    <a href="https://maps.google.com/?q=Краматорськ,вул.Василя+Стуса,40" target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow transition flex items-center">
+                        <i class="fa-solid fa-location-dot text-brand-yellow mr-1.5"></i> 84301, Донецька обл., м. Краматорськ, вул. Василя Стуса, 40
+                    </a>
+                    <a href="tel:0626437490" class="hidden lg:flex items-center hover:text-brand-yellow transition">
+                        <i class="fa-solid fa-phone text-brand-yellow mr-1.5"></i> (06264) 3-74-90
+                    </a>
+                    <a href="mailto:school5.kramatorsk@gmail.com" class="hidden sm:flex items-center hover:text-brand-yellow transition">
+                        <i class="fa-solid fa-envelope text-brand-yellow mr-1.5"></i> school5.kramatorsk@gmail.com
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleAccessibilityPanel()" class="flex items-center text-brand-yellow font-medium hover:underline focus:outline-none">
+                        <i class="fa-solid fa-eye mr-1.5"></i> Версія для слабозорих
+                    </button>
+                    <div class="h-3 w-px bg-blue-700"></div>
+                    <button onclick="openModal('admin-login-modal')" id="login-btn-header" class="text-slate-200 hover:text-brand-yellow transition flex items-center">
+                        <i class="fa-solid fa-lock mr-1"></i> Вхід для адміна
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo & Branding Bar -->
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <a href="#top" class="flex items-center space-x-4 group">
+                <div class="w-16 h-16 bg-gradient-to-br from-brand-blue to-blue-700 rounded-full flex items-center justify-center text-brand-yellow shadow-lg group-hover:scale-105 transition transform flex-shrink-0 border-2 border-brand-yellow">
+                    <i class="fa-solid fa-graduation-cap text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-lg md:text-xl lg:text-2xl leading-tight uppercase tracking-tight group-hover:text-brand-blue transition" id="school-title-text">
+                        Краматорська ЗОШ І-ІІІ ступенів №5
+                    </h1>
+                    <p class="text-xs md:text-sm text-slate-500 font-medium">Краматорської міської ради Донецької області</p>
+                    <p class="text-xs text-brand-blue font-semibold italic mt-0.5">Офіційний вебсайт закладу освіти</p>
+                </div>
+            </a>
+
+            <!-- Search & Action Call -->
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="searchInput" oninput="filterContent()" placeholder="Пошук по сайту..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent shadow-sm">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                </div>
+                <a href="#feedback" class="hidden lg:flex items-center justify-center px-4 py-2 bg-brand-yellow hover:bg-yellow-500 text-slate-900 font-bold rounded-lg text-sm shadow transition transform hover:-translate-y-0.5 flex-shrink-0">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Задати питання
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="bg-brand-blue text-white shadow-inner">
+            <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+                <!-- Desktop Menu (Dynamic) -->
+                <div class="hidden md:flex items-center space-x-1 font-medium text-sm overflow-x-auto" id="main-nav-desktop">
+                    <!-- Dynamic Nav Items Rendered Here -->
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden py-3 text-white focus:outline-none flex items-center">
+                    <i class="fa-solid fa-bars text-xl mr-2"></i> Меню
+                </button>
+            </div>
+
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-brand-darkBlue border-t border-blue-800 px-4 py-3 space-y-2 text-sm">
+                <!-- Dynamic Mobile Nav Items Rendered Here -->
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO BANNER SECTION -->
+    <section id="top" class="relative bg-slate-900 text-white overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-darkBlue/90 via-brand-darkBlue/70 to-brand-blue z-10"></div>
+        
+        <div class="relative z-20 max-w-7xl mx-auto px-4 py-16 md:py-24 flex flex-col justify-center min-h-[420px]">
+            <span class="inline-block px-3 py-1 bg-brand-yellow text-slate-900 font-extrabold text-xs uppercase rounded-full mb-4 w-max shadow-lg">Ласкаво просимо!</span>
+            <h2 id="hero-title" class="text-3xl md:text-5xl font-extrabold max-w-2xl leading-tight mb-4 text-white drop-shadow">
+                Якісна освіта, безпечне середовище та всебічний розвиток
+            </h2>
+            <p id="hero-desc" class="text-slate-200 text-base md:text-lg max-w-xl mb-8 leading-relaxed">
+                Краматорська ЗОШ №5 — це простір твоїх можливостей, нових досягнень та успішного майбутнього. Запрошуємо до нашої шкільної родини!
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#announcements" class="px-6 py-3.5 bg-brand-yellow hover:bg-yellow-500 text-slate-900 font-bold rounded-lg shadow-lg transition transform hover:-translate-y-0.5 flex items-center">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Правила прийому
+                </a>
+                <a href="https://nz.ua" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md rounded-lg border border-white/30 transition flex items-center">
+                    <i class="fa-solid fa-desktop mr-2"></i> Електронні щоденники (NZ.UA)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK ACCESS BUTTONS -->
+    <section class="bg-white border-b border-slate-200 py-6 relative z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button onclick="openModal('schedule-modal')" class="p-4 rounded-xl bg-blue-50 border border-blue-100 hover:border-brand-blue hover:shadow-md transition flex items-center space-x-4 group text-left w-full">
+                <div class="w-12 h-12 rounded-lg bg-brand-blue text-white flex items-center justify-center text-xl group-hover:scale-110 transition flex-shrink-0">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-brand-blue transition">Розклад дзвінків</h4>
+                    <p class="text-xs text-slate-500">Графік уроків та перерв</p>
+                </div>
+            </button>
+
+            <a href="#distance-learning" class="p-4 rounded-xl bg-amber-50 border border-amber-100 hover:border-brand-yellow hover:shadow-md transition flex items-center space-x-4 group">
+                <div class="w-12 h-12 rounded-lg bg-brand-yellow text-slate-900 flex items-center justify-center text-xl group-hover:scale-110 transition flex-shrink-0">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-brand-yellow transition">Розклад уроків</h4>
+                    <p class="text-xs text-slate-500">Онлайн класи та уроки</p>
+                </div>
+            </a>
+
+            <button onclick="openModal('nmt-modal')" class="p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:border-emerald-500 hover:shadow-md transition flex items-center space-x-4 group text-left w-full">
+                <div class="w-12 h-12 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xl group-hover:scale-110 transition flex-shrink-0">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-emerald-600 transition">НМТ / ЗНО</h4>
+                    <p class="text-xs text-slate-500">Інформація для випускників</p>
+                </div>
+            </button>
+
+            <button onclick="openModal('psychology-modal')" class="p-4 rounded-xl bg-purple-50 border border-purple-100 hover:border-purple-500 hover:shadow-md transition flex items-center space-x-4 group text-left w-full">
+                <div class="w-12 h-12 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xl group-hover:scale-110 transition flex-shrink-0">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-purple-600 transition">Психологічна служба</h4>
+                    <p class="text-xs text-slate-500">Підтримка та поради</p>
+                </div>
+            </button>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT CONTAINER WITH SIDEBAR -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-10 w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- LEFT/MAIN COLUMN (2 Cols) -->
+        <div class="lg:col-span-2 space-y-12">
+
+            <!-- NEWS SECTION -->
+            <section id="news" class="scroll-mt-24">
+                <div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-brand-blue">
+                    <h3 class="text-2xl font-extrabold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-newspaper text-brand-blue mr-3"></i> Останні новини
+                    </h3>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Оновлено</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="newsGrid">
+                    <!-- Dynamic News Cards rendered here -->
+                </div>
+            </section>
+
+            <!-- ABOUT SCHOOL SECTION WITH TABS -->
+            <section id="about" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 scroll-mt-24">
+                <div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-brand-yellow">
+                    <h3 class="text-2xl font-extrabold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-school text-brand-yellow mr-3"></i> Про наш заклад
+                    </h3>
+                    <button onclick="openModal('manage-tabs-modal')" class="admin-only hidden text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold px-3 py-1.5 rounded-lg transition">
+                        <i class="fa-solid fa-gear mr-1"></i> Редагувати вкладки
+                    </button>
+                </div>
+
+                <!-- Dynamic Tabs Header -->
+                <div class="flex flex-wrap border-b border-slate-200 mb-6 gap-2" id="about-tabs-header">
+                    <!-- Dynamic Tabs Rendered Here -->
+                </div>
+
+                <!-- Dynamic Tabs Content Container -->
+                <div id="about-tabs-content">
+                    <!-- Dynamic Content Rendered Here -->
+                </div>
+            </section>
+
+            <!-- DISTANCE LEARNING SECTION -->
+            <section id="distance-learning" class="bg-gradient-to-r from-brand-blue to-blue-800 rounded-2xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden scroll-mt-24">
+                <div class="relative z-10 max-w-xl">
+                    <span class="px-3 py-1 bg-brand-yellow text-slate-900 font-bold text-xs rounded-full uppercase mb-3 inline-block">Освіта 24/7</span>
+                    <h3 class="text-2xl font-extrabold mb-3">Дистанційний режим навчання</h3>
+                    <p class="text-blue-100 text-sm mb-6 leading-relaxed">
+                        Освітній процес у закладі здійснюється з використанням сучасних онлайн-платформ Google Workspace for Education, Microsoft Teams та Нові Знання.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://nz.ua" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white text-brand-blue font-bold rounded-lg hover:bg-slate-100 transition shadow text-xs uppercase flex items-center">
+                            <i class="fa-solid fa-graduation-cap mr-2"></i> Портал Нові Знання
+                        </a>
+                        <a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-brand-yellow text-slate-900 font-bold rounded-lg hover:bg-yellow-400 transition shadow text-xs uppercase flex items-center">
+                            <i class="fa-brands fa-google mr-2"></i> Google Classroom
+                        </a>
+                    </div>
+                </div>
+                <i class="fa-solid fa-laptop-code absolute -right-6 -bottom-6 text-9xl text-white opacity-10"></i>
+            </section>
+
+        </div>
+
+        <!-- RIGHT COLUMN / SIDEBAR (1 Col) -->
+        <aside class="space-y-8">
+
+            <!-- ANNOUNCEMENTS BLOCK -->
+            <div id="announcements" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 scroll-mt-24">
+                <h3 class="text-xl font-extrabold text-slate-900 mb-4 pb-2 border-b-2 border-brand-blue flex items-center justify-between">
+                    <span class="flex items-center"><i class="fa-solid fa-bullhorn text-brand-blue mr-2.5"></i> Оголошення</span>
+                </h3>
+
+                <div class="space-y-4" id="announcementsGrid">
+                    <!-- Dynamic Announcements rendered here -->
+                </div>
+            </div>
+
+            <!-- HELPFUL OFFICIAL LINKS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b-2 border-brand-yellow">
+                    <h3 class="text-lg font-extrabold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-link text-brand-yellow mr-2.5"></i> Офіційні ресурси
+                    </h3>
+                    <button onclick="openModal('manage-links-modal')" class="admin-only hidden text-[11px] bg-teal-100 text-teal-800 hover:bg-teal-200 font-bold px-2 py-1 rounded transition">
+                        <i class="fa-solid fa-pen mr-1"></i> Редагувати
+                    </button>
+                </div>
+
+                <ul class="space-y-3 text-xs" id="officialLinksList">
+                    <!-- Dynamic Links Rendered Here -->
+                </ul>
+            </div>
+
+            <!-- FEEDBACK FORM -->
+            <div id="feedback" class="bg-slate-900 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+                <h3 class="text-lg font-bold mb-2 flex items-center">
+                    <i class="fa-solid fa-comments text-brand-yellow mr-2"></i> Напишіть нам
+                </h3>
+                <p class="text-xs text-slate-300 mb-4">
+                    Відправте ваші питання чи побажання напряму адміністрації школи.
+                </p>
+
+                <form onsubmit="handleFormSubmit(event)" class="space-y-3">
+                    <div>
+                        <input type="text" id="feedback-name" required placeholder="Ваше ім'я" class="w-full px-3 py-2 bg-slate-800 text-white rounded-lg text-xs border border-slate-700 focus:outline-none focus:border-brand-yellow">
+                    </div>
+                    <div>
+                        <input type="email" id="feedback-contact" required placeholder="Ваш Email або телефон" class="w-full px-3 py-2 bg-slate-800 text-white rounded-lg text-xs border border-slate-700 focus:outline-none focus:border-brand-yellow">
+                    </div>
+                    <div>
+                        <textarea id="feedback-msg" required rows="3" placeholder="Ваше запитання..." class="w-full px-3 py-2 bg-slate-800 text-white rounded-lg text-xs border border-slate-700 focus:outline-none focus:border-brand-yellow"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-brand-yellow hover:bg-yellow-500 text-slate-900 font-bold rounded-lg text-xs uppercase tracking-wider transition">
+                        Надіслати
+                    </button>
+                </form>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contacts" class="bg-slate-900 text-slate-300 border-t-4 border-brand-yellow mt-12 text-sm">
+        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Col 1: Contacts -->
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-brand-blue text-brand-yellow rounded-full flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="font-extrabold text-white text-base">Краматорська ЗОШ №5</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                    Краматорська загальноосвітня школа І-ІІІ ступенів №5 Краматорської міської ради Донецької області.
+                </p>
+                <div class="space-y-2 text-xs">
+                    <a href="https://maps.google.com/?q=Краматорськ,вул.Василя+Стуса,40" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-brand-yellow transition">
+                        <i class="fa-solid fa-location-dot text-brand-yellow mr-2.5 w-4 text-center"></i> 84301, м. Краматорськ, вул. Василя Стуса, 40
+                    </a>
+                    <a href="tel:0626437490" class="flex items-center hover:text-brand-yellow transition">
+                        <i class="fa-solid fa-phone text-brand-yellow mr-2.5 w-4 text-center"></i> (06264) 3-74-90
+                    </a>
+                    <a href="mailto:school5.kramatorsk@gmail.com" class="flex items-center hover:text-brand-yellow transition">
+                        <i class="fa-solid fa-envelope text-brand-yellow mr-2.5 w-4 text-center"></i> school5.kramatorsk@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Col 2: Navigation Links -->
+            <div class="md:px-8">
+                <h4 class="font-bold text-white text-base mb-4 pb-1 border-b border-slate-800">Розділи сайту</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#top" class="hover:text-brand-yellow transition">Головна сторінка</a></li>
+                    <li><a href="#about" class="hover:text-brand-yellow transition">Про школу та історія</a></li>
+                    <li><a href="#announcements" class="hover:text-brand-yellow transition">Оголошення та вступникам</a></li>
+                    <li><a href="#distance-learning" class="hover:text-brand-yellow transition">Дистанційне навчання</a></li>
+                    <li><a href="#news" class="hover:text-brand-yellow transition">Шкільні новини</a></li>
+                    <li><a href="https://dn.isuo.org/schools/view/id/7899" target="_blank" rel="noopener noreferrer" class="hover:text-brand-yellow transition">Картка школи на ІСУО <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-slate-950 py-4 px-4 text-xs text-slate-500 border-t border-slate-800">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+                <p>© <span id="current-year"></span> Краматорська ЗОШ І-ІІІ ступенів №5. Всі права захищено.</p>
+                <p>Офіційний вебсайт закладу освіти</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+
+    <!-- Site Settings Modal (Updated without VP) -->
+    <div id="site-settings-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('site-settings-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-sliders text-orange-600 mr-2"></i> Налаштування сайту та блоків
+            </h3>
+            <form onsubmit="saveSiteSettings(event)" class="space-y-4 text-xs">
+                
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-sm border-b pb-1 mb-3">Головний банер (Hero)</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Заголовок</label>
+                            <input type="text" id="set-hero-title" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Опис</label>
+                            <textarea id="set-hero-desc" required rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-sm border-b pb-1 mb-3">Статистика школи</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Кількість здобувачів</label>
+                            <input type="text" id="set-stat-students" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Кількість педагогів</label>
+                            <input type="text" id="set-stat-teachers" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-sm border-b pb-1 mb-3">Адміністрація: Директор</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div><label class="block font-bold text-slate-700 mb-1">ПІБ</label><input type="text" id="set-dir-name" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></div>
+                        <div><label class="block font-bold text-slate-700 mb-1">Фото (URL)</label><input type="url" id="set-dir-photo" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></div>
+                        <div><label class="block font-bold text-slate-700 mb-1">Телефон</label><input type="text" id="set-dir-phone" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></div>
+                        <div><label class="block font-bold text-slate-700 mb-1">Прийомні дні</label><input type="text" id="set-dir-hours" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg uppercase tracking-wider transition mt-4">
+                    Зберегти налаштування
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Manage Vice Principals Modal (New!) -->
+    <div id="manage-vp-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('manage-vp-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-users text-fuchsia-600 mr-2"></i> Керування завучами
+            </h3>
+
+            <form onsubmit="saveVp(event)" class="space-y-3 bg-fuchsia-50 p-4 rounded-xl border border-fuchsia-100 text-xs mb-6">
+                <input type="hidden" id="vp-edit-id">
+                <h4 class="font-bold text-fuchsia-900 text-sm mb-2" id="vp-form-label">Додати завуча</h4>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">ПІБ</label>
+                    <input type="text" id="vp-name-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Фото (URL)</label>
+                    <input type="url" id="vp-photo-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Посада</label>
+                    <input type="text" id="vp-role-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Email / Контакт</label>
+                    <input type="text" id="vp-email-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none bg-white">
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-full py-2 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                        Зберегти
+                    </button>
+                    <button type="button" onclick="resetVpForm()" class="py-2 px-4 bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold rounded-lg transition">
+                        Скинути
+                    </button>
+                </div>
+            </form>
+
+            <h4 class="font-bold text-slate-900 text-sm mb-2">Список заступників директора:</h4>
+            <div id="vps-manager-list" class="space-y-2 text-xs">
+                <!-- Dynamic VPs list -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Announcement Modal -->
+    <div id="add-announcement-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('add-announcement-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-bullhorn text-brand-blue mr-2"></i> Додати оголошення
+            </h3>
+            <form onsubmit="saveAnnouncement(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="anc-edit-id">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Тег / Категорія</label>
+                    <input type="text" id="anc-tag-input" required placeholder="Наприклад: Важливо" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Заголовок</label>
+                    <input type="text" id="anc-title-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Текст оголошення</label>
+                    <textarea id="anc-text-input" required rows="3" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                    Зберегти оголошення
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="schedule-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('schedule-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-clock text-brand-blue mr-2"></i> Розклад дзвінків
+            </h3>
+            <div class="space-y-2 text-sm text-slate-700">
+                <div class="flex justify-between py-2 border-b"><span>1 урок:</span><span class="font-bold">08:30 – 09:15</span></div>
+                <div class="flex justify-between py-2 border-b"><span>2 урок:</span><span class="font-bold">09:25 – 10:10</span></div>
+                <div class="flex justify-between py-2 border-b"><span>3 урок:</span><span class="font-bold">10:30 – 11:15</span></div>
+                <div class="flex justify-between py-2 border-b"><span>4 урок:</span><span class="font-bold">11:35 – 12:20</span></div>
+                <div class="flex justify-between py-2 border-b"><span>5 урок:</span><span class="font-bold">12:40 – 13:25</span></div>
+                <div class="flex justify-between py-2 border-b"><span>6 урок:</span><span class="font-bold">13:35 – 14:20</span></div>
+                <div class="flex justify-between py-2"><span>7 урок:</span><span class="font-bold">14:30 – 15:15</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NMT Modal -->
+    <div id="nmt-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('nmt-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-square-poll-vertical text-emerald-600 mr-2"></i> Підготовка до НМТ
+            </h3>
+            <p class="text-sm text-slate-600 mb-4">
+                Інформаційні матеріали, демоверсії тестів та розклад додаткових консультацій для випускників 11-х класів.
+            </p>
+            <ul class="list-disc pl-5 text-xs text-slate-700 space-y-2">
+                <li>Обов'язкові предмети: Українська мова, Математика, Історія України</li>
+                <li>Предмет за вибором: Іноземна мова, Біологія, Фізика, Хімія, Географія</li>
+                <li>Консультації вчителів школи: щовівторка та щочетверга о 15:00</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Psychology Modal -->
+    <div id="psychology-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('psychology-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-heart-pulse text-purple-600 mr-2"></i> Психологічна служба
+            </h3>
+            <p class="text-sm text-slate-600 mb-4">
+                Практичний психолог школи надає індивідуальні консультації для учнів та батьків у конфіденційному форматі.
+            </p>
+            <div class="p-3 bg-purple-50 rounded-lg border border-purple-100 text-xs text-purple-900">
+                <strong>Телефон психологічної підтримки школи:</strong> <a href="tel:0626437490" class="underline">(06264) 3-74-90</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Detail Modal -->
+    <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('news-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <span id="news-modal-date" class="text-xs font-bold text-brand-blue block mb-1"></span>
+            <h3 id="news-modal-title" class="text-xl font-extrabold text-slate-900 mb-4"></h3>
+            
+            <div id="news-modal-img-container" class="mb-4 hidden">
+                <img id="news-modal-img" src="" alt="Новина" class="w-full max-h-80 object-cover rounded-xl shadow">
+            </div>
+
+            <!-- YouTube Video Embed Container -->
+            <div id="news-modal-video-container" class="mb-4 hidden aspect-video w-full rounded-xl overflow-hidden shadow">
+                <iframe id="news-modal-video" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <p id="news-modal-text" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('admin-login-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-2 flex items-center">
+                <i class="fa-solid fa-lock text-brand-blue mr-2"></i> Вхід для адміністратора
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Введіть логін та пароль для керування контентом сайту.</p>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Логін</label>
+                    <input type="text" id="login-username" required placeholder="admin" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Пароль</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div class="bg-blue-50 p-2.5 rounded-lg text-blue-900 text-[11px]">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Початковий логін: <strong>admin</strong> | пароль: <strong>admin123</strong>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-brand-blue text-white font-bold rounded-lg uppercase tracking-wider hover:bg-brand-darkBlue transition">
+                    Увійти
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit News Modal -->
+    <div id="add-news-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('add-news-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 id="news-form-title" class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-newspaper text-brand-blue mr-2"></i> Додати новину
+            </h3>
+            <form onsubmit="saveNews(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="news-edit-id">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Заголовок новини</label>
+                    <input type="text" id="news-title-input" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Дата</label>
+                    <input type="text" id="news-date-input" required placeholder="26.10.2026" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1"><i class="fa-solid fa-image text-slate-500 mr-1"></i> URL зображення (фото)</label>
+                    <input type="url" id="news-img-input" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1"><i class="fa-brands fa-youtube text-red-600 mr-1"></i> Посилання на відео YouTube</label>
+                    <input type="text" id="news-video-input" placeholder="https://www.youtube.com/watch?v=... або https://youtu.be/..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Короткий опис</label>
+                    <textarea id="news-summary-input" required rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Повний текст новини</label>
+                    <textarea id="news-full-input" required rows="4" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-blue outline-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                    Зберегти новину
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Manage Tabs Modal -->
+    <div id="manage-tabs-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('manage-tabs-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-folder-plus text-purple-600 mr-2"></i> Керування вкладками "Про наш заклад"
+            </h3>
+            
+            <form onsubmit="saveTab(event)" class="space-y-3 bg-purple-50 p-4 rounded-xl border border-purple-100 text-xs mb-6">
+                <input type="hidden" id="tab-edit-id">
+                <h4 class="font-bold text-purple-900 text-sm mb-2" id="tab-form-label">Додати нову вкладку</h4>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Назва вкладки</label>
+                    <input type="text" id="tab-title-input" required placeholder="Наприклад: Наші нагороди" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Вміст (HTML дозволено)</label>
+                    <textarea id="tab-content-input" required rows="4" placeholder="Текст або HTML код контенту..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none bg-white font-mono text-[11px]"></textarea>
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                        Зберегти вкладку
+                    </button>
+                    <button type="button" onclick="resetTabForm()" class="py-2 px-4 bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold rounded-lg transition">
+                        Скинути
+                    </button>
+                </div>
+            </form>
+
+            <h4 class="font-bold text-slate-900 text-sm mb-2">Наявні вкладки:</h4>
+            <div id="tabs-manager-list" class="space-y-2 text-xs">
+                <!-- Dynamic List of Tabs for edit/delete -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Navigation Modal -->
+    <div id="manage-nav-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('manage-nav-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-bars-staggered text-indigo-600 mr-2"></i> Керування Головним Меню
+            </h3>
+
+            <form onsubmit="saveNavItem(event)" class="space-y-3 bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-xs mb-6">
+                <input type="hidden" id="nav-edit-id">
+                <h4 class="font-bold text-indigo-900 text-sm mb-2" id="nav-form-label">Додати пункт меню</h4>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Назва пункту</label>
+                    <input type="text" id="nav-title-input" required placeholder="Наприклад: Проєкти" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Посилання (URL або #якорь)</label>
+                    <input type="text" id="nav-link-input" required placeholder="#news або https://example.com" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Класи іконок FontAwesome (необов'язково)</label>
+                    <input type="text" id="nav-icon-input" placeholder="fa-solid fa-star" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                </div>
+                <div class="flex items-center space-x-2 my-2">
+                    <input type="checkbox" id="nav-external-input" class="rounded text-indigo-600">
+                    <label for="nav-external-input" class="text-slate-700 font-medium">Відкривати в новій вкладці</label>
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                        Зберегти пункт меню
+                    </button>
+                    <button type="button" onclick="resetNavForm()" class="py-2 px-4 bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold rounded-lg transition">
+                        Скинути
+                    </button>
+                </div>
+            </form>
+
+            <h4 class="font-bold text-slate-900 text-sm mb-2">Наявне меню:</h4>
+            <div id="nav-manager-list" class="space-y-2 text-xs">
+                <!-- Dynamic Navigation Items list -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Official Links Modal -->
+    <div id="manage-links-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('manage-links-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4 flex items-center">
+                <i class="fa-solid fa-link text-teal-600 mr-2"></i> Керування Офіційними Ресурсами
+            </h3>
+
+            <form onsubmit="saveOfficialLink(event)" class="space-y-3 bg-teal-50 p-4 rounded-xl border border-teal-100 text-xs mb-6">
+                <input type="hidden" id="link-edit-id">
+                <h4 class="font-bold text-teal-900 text-sm mb-2" id="link-form-label">Додати ресурс</h4>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Назва організації / сайту</label>
+                    <input type="text" id="link-title-input" required placeholder="Наприклад: МОН України" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Підзаголовок / опис</label>
+                    <input type="text" id="link-sub-input" required placeholder="Наприклад: Офіційний вебсайт" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">URL посилання</label>
+                    <input type="url" id="link-url-input" required placeholder="https://..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none bg-white">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Іконка FontAwesome (клас)</label>
+                    <input type="text" id="link-icon-input" required placeholder="fa-solid fa-building-columns text-brand-blue" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none bg-white">
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg uppercase tracking-wider transition">
+                        Зберегти ресурс
+                    </button>
+                    <button type="button" onclick="resetLinkForm()" class="py-2 px-4 bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold rounded-lg transition">
+                        Скинути
+                    </button>
+                </div>
+            </form>
+
+            <h4 class="font-bold text-slate-900 text-sm mb-2">Наявні ресурси:</h4>
+            <div id="links-manager-list" class="space-y-2 text-xs">
+                <!-- Dynamic Links list -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Box Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center">
+            <div id="alert-icon" class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mx-auto mb-3">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h4 id="alert-title" class="font-extrabold text-slate-900 text-base mb-2">Сповіщення</h4>
+            <p id="alert-message" class="text-xs text-slate-600 mb-5"></p>
+            <button onclick="closeModal('custom-alert-modal')" class="w-full py-2 bg-brand-blue text-white font-bold rounded-lg text-xs uppercase transition">
+                Зрозуміло
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT & CMS ENGINE -->
+    <script>
+        // Set dynamic year on load
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('current-year').innerText = new Date().getFullYear();
+        });
+
+        // State Management & LocalStorage Defaults
+        const defaultSettings = {
+            heroTitle: 'Якісна освіта, безпечне середовище та всебічний розвиток',
+            heroDesc: 'Краматорська ЗОШ №5 — це простір твоїх можливостей, нових досягнень та успішного майбутнього. Запрошуємо до нашої шкільної родини!',
+            students: '650+',
+            teachers: '45',
+            dirName: 'Іванов Іван Іванович',
+            dirPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80',
+            dirPhone: '(06264) 3-74-90',
+            dirHours: 'Понеділок 14:00 - 16:00'
+        };
+
+        const defaultVps = [
+            {
+                id: 1,
+                name: 'Петрова Анна Сергіївна',
+                photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80',
+                role: 'Заступник з навчальної роботи',
+                email: 'school5.kramatorsk@gmail.com'
+            }
+        ];
+
+        const defaultNews = [
+            {
+                id: 1,
+                title: 'Міжнародний день шкільних бібліотек',
+                date: '26.10.2026',
+                img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80',
+                video: '',
+                summary: 'У нашій школі відбулися тематичні виставки та інтерактивні вікторини до Міжнародного дня шкільних бібліотек.',
+                fullText: 'У нашій школі відбулися тематичні виставки та інтерактивні вікторини до Міжнародного дня шкільних бібліотек. Учні презентували свої улюблені книги, брали участь у літературному квесті та дізналися більше про історію виникнення книгодрукування.'
+            },
+            {
+                id: 2,
+                title: 'Фронтальний експеримент з физики',
+                date: '22.10.2026',
+                img: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80',
+                video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                summary: 'Учні 9-х класів провели цікаві дослідження механічних явищ у рамках фронтального лабораторного експерименту.',
+                fullText: 'Учні 9-х класів провели цікаві дослідження механічних явищ у рамках фронтального лабораторного експерименту. Завдяки сучасному обладнанню кабінету фізики кожен міг самостійно перевірити закони динаміки.'
+            }
+        ];
+
+        const defaultAnnouncements = [
+            {
+                id: 1,
+                tag: 'Прийом 2026-2027',
+                title: 'Прийом документів до 1-го класу',
+                text: 'Шановні батьки! Розпочато прийом заяв та документів майбутніх першокласників.'
+            }
+        ];
+
+        const defaultTabs = [
+            {
+                id: 'tab-history',
+                title: 'Історія та досягнення',
+                content: `<p class="mb-3">Краматорська загальноосвітня школа І-ІІІ ступенів №5 Краматорської міської ради Донецької області є сучасним осередком освіти, де поєднуються класичні традиції навчання та новітні педагогічні технології.</p><p class="mb-4">Головна мета нашої діяльності — створення безпечного, інклюзивного та мотивуючого освітнього середовища для розвитку здібностей та талантів кожного здобувача освіти.</p><div id="dynamic-stats-container"></div>`
+            },
+            {
+                id: 'tab-admin',
+                title: 'Адміністрація',
+                content: `<div id="dynamic-admin-container"></div>`
+            },
+            {
+                id: 'tab-teachers',
+                title: 'Педагогічний колектив',
+                content: `<p class="mb-4">У закладі працює висококваліфікований педагогічний колектив, серед яких вчителі-методисти, старші вчителі та відмінники освіти України.</p><ul class="list-disc pl-5 space-y-2 text-xs text-slate-700"><li>Методичне об'єднання вчителів початкових класів</li><li>Методичне об'єднання гуманітарного циклу</li><li>Методичне об'єднання природничо-математичних дисциплін</li><li>Кафедра естетично-виховного та спортивного напрямку</li></ul>`
+            }
+        ];
+
+        const defaultNavItems = [
+            { id: 1, title: 'Головна', link: '#top', icon: 'fa-solid fa-house', isExternal: false },
+            { id: 2, title: 'Про школу', link: '#about', icon: '', isExternal: false },
+            { id: 3, title: 'Оголошення', link: '#announcements', icon: '', isExternal: false },
+            { id: 4, title: 'Дистанційне навчання', link: '#distance-learning', icon: 'fa-solid fa-laptop-code text-brand-yellow', isExternal: false }
+        ];
+
+        const defaultOfficialLinks = [
+            { id: 1, title: 'МОН України', sub: 'Офіційний сайт', url: 'https://mon.gov.ua', icon: 'fa-solid fa-building-columns text-brand-blue' }
+        ];
+
+        let settingsData = JSON.parse(localStorage.getItem('kram_settings_v3')) || defaultSettings;
+        let vpData = JSON.parse(localStorage.getItem('kram_vps_v1')) || defaultVps;
+        let newsData = JSON.parse(localStorage.getItem('kram_news_v2')) || defaultNews;
+        let announcementsData = JSON.parse(localStorage.getItem('kram_announcements_v2')) || defaultAnnouncements;
+        let tabsData = JSON.parse(localStorage.getItem('kram_tabs_v2')) || defaultTabs;
+        let navData = JSON.parse(localStorage.getItem('kram_nav_v2')) || defaultNavItems;
+        let linksData = JSON.parse(localStorage.getItem('kram_links_v2')) || defaultOfficialLinks;
+        let adminAuth = JSON.parse(localStorage.getItem('kram_admin_auth')) || { user: 'admin', pass: 'admin123', loggedIn: false };
+        let activeTabId = tabsData.length > 0 ? tabsData[0].id : '';
+
+        // Accessibility Functions
+        function setTheme(mode) {
+            document.body.classList.remove('high-contrast', 'inversion');
+            if (mode !== 'normal') document.body.classList.add(mode);
+        }
+        function setFontSize(mode) {
+            document.body.classList.remove('fs-large', 'fs-xlarge');
+            if (mode === 'large') document.body.classList.add('fs-large');
+            if (mode === 'xlarge') document.body.classList.add('fs-xlarge');
+        }
+        function setImagesMode(mode) {
+            document.body.classList.remove('hide-images', 'grayscale-images');
+            if (mode === 'hide') document.body.classList.add('hide-images');
+            if (mode === 'grayscale') document.body.classList.add('grayscale-images');
+        }
+        function resetAccessibility() {
+            setTheme('normal');
+            setFontSize('normal');
+            setImagesMode('normal');
+        }
+
+        // Generic modal management
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if(m) {
+                m.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if(m) {
+                m.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Form Submit
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showAlert('Дякуємо!', 'Ваше повідомлення надіслано адміністрації.');
+            e.target.reset();
+        }
+
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+        }
+
+        // Real-time site search
+        function filterContent() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            
+            // News filter
+            const newsItems = document.querySelectorAll('.news-item');
+            newsItems.forEach(item => {
+                if (item.innerText.toLowerCase().includes(input)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Announcements filter
+            const ancContainer = document.getElementById('announcementsGrid');
+            if(ancContainer) {
+                Array.from(ancContainer.children).forEach(item => {
+                    if (item.innerText.toLowerCase().includes(input)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNews();
+            renderAnnouncements();
+            renderTabs();
+            renderNav();
+            renderOfficialLinks();
+            renderSettings();
+            renderVpsManager();
+            checkAdminStatus();
+        });
+
+        function showAlert(title, message, isSuccess = true) {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-message').innerText = message;
+            const icon = document.getElementById('alert-icon');
+            if(isSuccess) {
+                icon.className = "w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mx-auto mb-3";
+                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                icon.className = "w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3";
+                icon.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+            }
+            openModal('custom-alert-modal');
+        }
+
+        function renderSettings() {
+            const heroTitle = document.getElementById('hero-title');
+            const heroDesc = document.getElementById('hero-desc');
+            if(heroTitle) heroTitle.innerText = settingsData.heroTitle;
+            if(heroDesc) heroDesc.innerText = settingsData.heroDesc;
+
+            const statsContainer = document.getElementById('dynamic-stats-container');
+            if(statsContainer) {
+                statsContainer.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-100 text-center">
+                        <div class="p-3 bg-slate-50 rounded-lg border">
+                            <span class="block text-2xl font-extrabold text-brand-blue">${settingsData.students}</span>
+                            <span class="text-xs text-slate-500">Здобувачів освіти</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-lg border">
+                            <span class="block text-2xl font-extrabold text-brand-blue">${settingsData.teachers}</span>
+                            <span class="text-xs text-slate-500">Кваліфікованих педагогів</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-lg border">
+                            <span class="block text-2xl font-extrabold text-brand-blue">100%</span>
+                            <span class="text-xs text-slate-500">Любові до знань</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const adminContainer = document.getElementById('dynamic-admin-container');
+            if(adminContainer) {
+                let vpHtml = '';
+                vpData.forEach(vp => {
+                    vpHtml += `
+                        <div class="p-4 bg-slate-50 border rounded-xl flex items-center space-x-4">
+                            <img src="${vp.photo}" alt="${vp.name}" class="w-16 h-16 rounded-full object-cover border-2 border-brand-yellow flex-shrink-0 shadow-md">
+                            <div>
+                                <h5 class="font-bold text-slate-900">${vp.name}</h5>
+                                <p class="text-[11px] text-brand-yellow font-bold uppercase tracking-wider mb-1">${vp.role}</p>
+                                <a href="mailto:${vp.email}" class="text-[11px] text-slate-700 font-semibold mt-1 inline-block hover:text-brand-yellow"><i class="fa-solid fa-envelope mr-1 text-brand-yellow"></i> ${vp.email}</a>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                adminContainer.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-slate-50 border rounded-xl flex items-center space-x-4">
+                            <img src="${settingsData.dirPhoto}" alt="Директор" class="w-16 h-16 rounded-full object-cover border-2 border-brand-blue flex-shrink-0 shadow-md">
+                            <div>
+                                <h5 class="font-bold text-slate-900">${settingsData.dirName}</h5>
+                                <p class="text-[11px] text-brand-blue font-bold uppercase tracking-wider mb-1">Директор школи</p>
+                                <p class="text-[11px] text-slate-500">Прийомні дні: ${settingsData.dirHours}</p>
+                                <a href="tel:${settingsData.dirPhone.replace(/[^0-9+]/g, '')}" class="text-[11px] text-slate-700 font-semibold mt-1 inline-block hover:text-brand-blue"><i class="fa-solid fa-phone mr-1 text-brand-blue"></i> ${settingsData.dirPhone}</a>
+                            </div>
+                        </div>
+                        ${vpHtml}
+                    </div>
+                `;
+            }
+        }
+
+        // VP Manager Actions
+        function renderVpsManager() {
+            const managerList = document.getElementById('vps-manager-list');
+            if (managerList) {
+                managerList.innerHTML = '';
+                vpData.forEach(item => {
+                    const mgrItem = document.createElement('div');
+                    mgrItem.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
+                    mgrItem.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <img src="${item.photo}" class="w-8 h-8 rounded-full object-cover">
+                            <div>
+                                <span class="font-bold text-slate-800">${item.name}</span>
+                                <span class="text-slate-400 block text-[10px]">${item.role}</span>
+                            </div>
+                        </div>
+                        <div class="space-x-2 flex">
+                            <button onclick="editVp(${item.id})" class="text-fuchsia-600 hover:text-fuchsia-800 px-2 py-1 bg-fuchsia-50 border rounded font-bold"><i class="fa-solid fa-pen mr-1"></i>Ред.</button>
+                            <button onclick="deleteVp(${item.id})" class="text-rose-600 hover:text-rose-800 px-2 py-1 bg-rose-50 border rounded font-bold"><i class="fa-solid fa-trash mr-1"></i>Вид.</button>
+                        </div>
+                    `;
+                    managerList.appendChild(mgrItem);
+                });
+            }
+            renderSettings();
+        }
+
+        function saveVp(e) {
+            e.preventDefault();
+            const editId = document.getElementById('vp-edit-id').value;
+            const name = document.getElementById('vp-name-input').value;
+            const photo = document.getElementById('vp-photo-input').value;
+            const role = document.getElementById('vp-role-input').value;
+            const email = document.getElementById('vp-email-input').value;
+
+            if (editId) {
+                const idx = vpData.findIndex(v => v.id === parseInt(editId));
+                if (idx !== -1) vpData[idx] = { id: parseInt(editId), name, photo, role, email };
+            } else {
+                vpData.push({ id: Date.now(), name, photo, role, email });
+            }
+            localStorage.setItem('kram_vps_v1', JSON.stringify(vpData));
+            renderVpsManager();
+            resetVpForm();
+            showAlert('Збережено', 'Дані заступника директора збережено!');
+        }
+
+        function editVp(id) {
+            const vp = vpData.find(v => v.id === id);
+            if (!vp) return;
+            document.getElementById('vp-edit-id').value = vp.id;
+            document.getElementById('vp-name-input').value = vp.name;
+            document.getElementById('vp-photo-input').value = vp.photo;
+            document.getElementById('vp-role-input').value = vp.role;
+            document.getElementById('vp-email-input').value = vp.email;
+            document.getElementById('vp-form-label').innerText = 'Редагувати дані';
+        }
+
+        function deleteVp(id) {
+            vpData = vpData.filter(v => v.id !== id);
+            localStorage.setItem('kram_vps_v1', JSON.stringify(vpData));
+            renderVpsManager();
+            showAlert('Видалено', 'Дані заступника видалено.');
+        }
+
+        function resetVpForm() {
+            document.getElementById('vp-edit-id').value = '';
+            document.getElementById('vp-name-input').value = '';
+            document.getElementById('vp-photo-input').value = '';
+            document.getElementById('vp-role-input').value = '';
+            document.getElementById('vp-email-input').value = '';
+            document.getElementById('vp-form-label').innerText = 'Додати завуча';
+        }
+
+        function renderNews() {
+            const container = document.getElementById('newsGrid');
+            container.innerHTML = '';
+
+            newsData.forEach(item => {
+                const card = document.createElement('article');
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col news-item relative";
+                
+                const adminButtons = adminAuth.loggedIn ? `
+                    <div class="absolute top-3 right-3 z-30 flex space-x-1">
+                        <button onclick="editNews(${item.id})" class="w-8 h-8 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-full flex items-center justify-center shadow text-xs transition" title="Редагувати">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteNews(${item.id})" class="w-8 h-8 bg-rose-600 hover:bg-rose-700 text-white rounded-full flex items-center justify-center shadow text-xs transition" title="Видалити">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                ` : '';
+
+                const hasVideoBadge = item.video ? `
+                    <span class="absolute bottom-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow flex items-center">
+                        <i class="fa-brands fa-youtube mr-1"></i> Відео
+                    </span>
+                ` : '';
+
+                card.innerHTML = `
+                    ${adminButtons}
+                    <div class="h-48 overflow-hidden relative bg-slate-100">
+                        <img src="${item.img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80'}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                        <span class="absolute top-3 left-3 bg-brand-blue text-white text-xs font-bold px-2.5 py-1 rounded shadow">${item.date}</span>
+                        ${hasVideoBadge}
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h4 class="font-bold text-slate-900 text-base mb-2 line-clamp-2 hover:text-brand-blue transition">${item.title}</h4>
+                        <p class="text-slate-600 text-xs mb-4 line-clamp-3 leading-relaxed">${item.summary}</p>
+                        <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-newspaper mr-1"></i> Новина</span>
+                            <button onclick="viewNewsDetail(${item.id})" class="text-xs font-bold text-brand-blue hover:underline flex items-center">
+                                Читати далі <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsGrid');
+            container.innerHTML = '';
+
+            announcementsData.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/80 relative";
+
+                const adminButtons = adminAuth.loggedIn ? `
+                    <div class="absolute top-2 right-2 flex space-x-1">
+                        <button onclick="editAnnouncement(${item.id})" class="text-amber-700 hover:text-amber-900 px-1 text-xs" title="Редагувати"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteAnnouncement(${item.id})" class="text-rose-600 hover:text-rose-800 px-1 text-xs" title="Видалити"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                ` : '';
+
+                el.innerHTML = `
+                    ${adminButtons}
+                    <span class="text-xs font-bold text-amber-800 block mb-1"><i class="fa-solid fa-calendar mr-1"></i> ${item.tag}</span>
+                    <h4 class="font-bold text-slate-900 text-sm mb-1">${item.title}</h4>
+                    <p class="text-slate-600 text-xs leading-relaxed">${item.text}</p>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function renderTabs() {
+            const headerContainer = document.getElementById('about-tabs-header');
+            const contentContainer = document.getElementById('about-tabs-content');
+            const managerList = document.getElementById('tabs-manager-list');
+
+            headerContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            if (managerList) managerList.innerHTML = '';
+
+            if (tabsData.length === 0) {
+                headerContainer.innerHTML = '<p class="text-xs text-slate-400 p-2">Немає вкладок</p>';
+                return;
+            }
+
+            if (!tabsData.some(t => t.id === activeTabId)) {
+                activeTabId = tabsData[0].id;
+            }
+
+            tabsData.forEach(tab => {
+                const btn = document.createElement('button');
+                btn.onclick = () => switchTab(tab.id);
+                btn.id = `btn-${tab.id}`;
+                const isActive = tab.id === activeTabId;
+                btn.className = `tab-btn px-4 py-2 font-medium text-sm transition ${isActive ? 'text-brand-blue border-b-2 border-brand-blue font-bold' : 'text-slate-500 hover:text-slate-800'}`;
+                btn.innerText = tab.title;
+                headerContainer.appendChild(btn);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.id = tab.id;
+                contentDiv.className = `tab-content text-slate-600 text-sm leading-relaxed ${isActive ? '' : 'hidden'}`;
+                contentDiv.innerHTML = tab.content;
+                contentContainer.appendChild(contentDiv);
+
+                if (managerList) {
+                    const mgrItem = document.createElement('div');
+                    mgrItem.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
+                    mgrItem.innerHTML = `
+                        <span class="font-bold text-slate-800">${tab.title}</span>
+                        <div class="space-x-2 flex">
+                            <button onclick="editTab('${tab.id}')" class="text-amber-600 hover:text-amber-800 px-2 py-1 bg-amber-50 border rounded font-bold"><i class="fa-solid fa-pen mr-1"></i>Ред.</button>
+                            <button onclick="deleteTab('${tab.id}')" class="text-rose-600 hover:text-rose-800 px-2 py-1 bg-rose-50 border rounded font-bold"><i class="fa-solid fa-trash mr-1"></i>Вид.</button>
+                        </div>
+                    `;
+                    managerList.appendChild(mgrItem);
+                }
+            });
+            renderSettings();
+        }
+
+        function switchTab(id) {
+            activeTabId = id;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('text-brand-blue', 'border-b-2', 'border-brand-blue', 'font-bold');
+                el.classList.add('text-slate-500');
+            });
+            const tabEl = document.getElementById(id);
+            const btnEl = document.getElementById(`btn-${id}`);
+            if(tabEl) tabEl.classList.remove('hidden');
+            if(btnEl) {
+                btnEl.classList.remove('text-slate-500');
+                btnEl.classList.add('text-brand-blue', 'border-b-2', 'border-brand-blue', 'font-bold');
+            }
+        }
+
+        function renderNav() {
+            const desktopNav = document.getElementById('main-nav-desktop');
+            const mobileNav = document.getElementById('mobile-menu');
+            const managerList = document.getElementById('nav-manager-list');
+
+            desktopNav.innerHTML = '';
+            mobileNav.innerHTML = '';
+            if (managerList) managerList.innerHTML = '';
+
+            navData.forEach(item => {
+                const dLink = document.createElement('a');
+                dLink.href = item.link;
+                if(item.isExternal) { dLink.target = "_blank"; dLink.rel = "noopener noreferrer"; }
+                dLink.className = "px-4 py-3 hover:bg-brand-darkBlue transition flex items-center whitespace-nowrap";
+                dLink.innerHTML = `${item.icon ? `<i class="${item.icon} mr-1.5"></i>` : ''}${item.title}`;
+                desktopNav.appendChild(dLink);
+
+                const mLink = document.createElement('a');
+                mLink.href = item.link;
+                if(item.isExternal) { mLink.target = "_blank"; mLink.rel = "noopener noreferrer"; }
+                mLink.className = "block py-2 hover:text-brand-yellow border-b border-blue-800 flex items-center";
+                mLink.innerHTML = `${item.icon ? `<i class="${item.icon} mr-2"></i>` : ''}${item.title}`;
+                mobileNav.appendChild(mLink);
+
+                if (managerList) {
+                    const mgrItem = document.createElement('div');
+                    mgrItem.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
+                    mgrItem.innerHTML = `
+                        <div>
+                            <span class="font-bold text-slate-800">${item.title}</span>
+                            <span class="text-slate-400 block text-[10px]">${item.link}</span>
+                        </div>
+                        <div class="space-x-2 flex">
+                            <button onclick="editNavItem(${item.id})" class="text-indigo-600 hover:text-indigo-800 px-2 py-1 bg-indigo-50 border rounded font-bold"><i class="fa-solid fa-pen mr-1"></i>Ред.</button>
+                            <button onclick="deleteNavItem(${item.id})" class="text-rose-600 hover:text-rose-800 px-2 py-1 bg-rose-50 border rounded font-bold"><i class="fa-solid fa-trash mr-1"></i>Вид.</button>
+                        </div>
+                    `;
+                    managerList.appendChild(mgrItem);
+                }
+            });
+        }
+
+        function renderOfficialLinks() {
+            const container = document.getElementById('officialLinksList');
+            const managerList = document.getElementById('links-manager-list');
+
+            container.innerHTML = '';
+            if (managerList) managerList.innerHTML = '';
+
+            linksData.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="flex items-center p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50 hover:border-brand-blue transition group">
+                        <i class="${item.icon} text-base mr-3 group-hover:scale-110 transition"></i>
+                        <div>
+                            <span class="font-bold text-slate-800 block">${item.title}</span>
+                            <span class="text-slate-400">${item.sub}</span>
+                        </div>
+                    </a>
+                `;
+                container.appendChild(li);
+
+                if (managerList) {
+                    const mgrItem = document.createElement('div');
+                    mgrItem.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
+                    mgrItem.innerHTML = `
+                        <div>
+                            <span class="font-bold text-slate-800">${item.title}</span>
+                            <span class="text-slate-400 block text-[10px]">${item.url}</span>
+                        </div>
+                        <div class="space-x-2 flex">
+                            <button onclick="editOfficialLink(${item.id})" class="text-teal-600 hover:text-teal-800 px-2 py-1 bg-teal-50 border rounded font-bold"><i class="fa-solid fa-pen mr-1"></i>Ред.</button>
+                            <button onclick="deleteOfficialLink(${item.id})" class="text-rose-600 hover:text-rose-800 px-2 py-1 bg-rose-50 border rounded font-bold"><i class="fa-solid fa-trash mr-1"></i>Вид.</button>
+                        </div>
+                    `;
+                    managerList.appendChild(mgrItem);
+                }
+            });
+        }
+
+        function openSettingsModal() {
+            document.getElementById('set-hero-title').value = settingsData.heroTitle;
+            document.getElementById('set-hero-desc').value = settingsData.heroDesc;
+            document.getElementById('set-stat-students').value = settingsData.students;
+            document.getElementById('set-stat-teachers').value = settingsData.teachers;
+            document.getElementById('set-dir-name').value = settingsData.dirName;
+            document.getElementById('set-dir-photo').value = settingsData.dirPhoto;
+            document.getElementById('set-dir-phone').value = settingsData.dirPhone;
+            document.getElementById('set-dir-hours').value = settingsData.dirHours;
+            openModal('site-settings-modal');
+        }
+
+        function saveSiteSettings(e) {
+            e.preventDefault();
+            settingsData = {
+                heroTitle: document.getElementById('set-hero-title').value,
+                heroDesc: document.getElementById('set-hero-desc').value,
+                students: document.getElementById('set-stat-students').value,
+                teachers: document.getElementById('set-stat-teachers').value,
+                dirName: document.getElementById('set-dir-name').value,
+                dirPhoto: document.getElementById('set-dir-photo').value,
+                dirPhone: document.getElementById('set-dir-phone').value,
+                dirHours: document.getElementById('set-dir-hours').value
+            };
+            localStorage.setItem('kram_settings_v3', JSON.stringify(settingsData));
+            renderSettings();
+            closeModal('site-settings-modal');
+            showAlert('Збережено', 'Налаштування сайту та блоків успішно оновлено!');
+        }
+
+        function viewNewsDetail(id) {
+            const item = newsData.find(n => n.id === id);
+            if (!item) return;
+            document.getElementById('news-modal-title').innerText = item.title;
+            document.getElementById('news-modal-date').innerText = item.date;
+            document.getElementById('news-modal-text').innerText = item.fullText || item.summary;
+            
+            const imgContainer = document.getElementById('news-modal-img-container');
+            const imgEl = document.getElementById('news-modal-img');
+            if (item.img) {
+                imgEl.src = item.img;
+                imgContainer.classList.remove('hidden');
+            } else {
+                imgContainer.classList.add('hidden');
+            }
+
+            const videoContainer = document.getElementById('news-modal-video-container');
+            const videoFrame = document.getElementById('news-modal-video');
+            const embedUrl = getYouTubeEmbedUrl(item.video);
+            if (embedUrl) {
+                videoFrame.src = embedUrl;
+                videoContainer.classList.remove('hidden');
+            } else {
+                videoFrame.src = '';
+                videoContainer.classList.add('hidden');
+            }
+            openModal('news-modal');
+        }
+
+        function saveNews(e) {
+            e.preventDefault();
+            const editId = document.getElementById('news-edit-id').value;
+            const title = document.getElementById('news-title-input').value;
+            const date = document.getElementById('news-date-input').value;
+            const img = document.getElementById('news-img-input').value;
+            const video = document.getElementById('news-video-input').value;
+            const summary = document.getElementById('news-summary-input').value;
+            const fullText = document.getElementById('news-full-input').value;
+
+            if (editId) {
+                const index = newsData.findIndex(n => n.id === parseInt(editId));
+                if (index !== -1) {
+                    newsData[index] = { id: parseInt(editId), title, date, img, video, summary, fullText };
+                }
+            } else {
+                const newItem = {
+                    id: Date.now(), title, date, video, summary, fullText,
+                    img: img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80'
+                };
+                newsData.unshift(newItem);
+            }
+            localStorage.setItem('kram_news_v2', JSON.stringify(newsData));
+            renderNews();
+            closeModal('add-news-modal');
+            resetNewsForm();
+            showAlert('Успіх', 'Новину успішно збережено!');
+        }
+
+        function editNews(id) {
+            const item = newsData.find(n => n.id === id);
+            if (!item) return;
+            document.getElementById('news-edit-id').value = item.id;
+            document.getElementById('news-title-input').value = item.title;
+            document.getElementById('news-date-input').value = item.date;
+            document.getElementById('news-img-input').value = item.img || '';
+            document.getElementById('news-video-input').value = item.video || '';
+            document.getElementById('news-summary-input').value = item.summary;
+            document.getElementById('news-full-input').value = item.fullText || item.summary;
+            document.getElementById('news-form-title').innerText = 'Редагувати новину';
+            openModal('add-news-modal');
+        }
+
+        function resetNewsForm() {
+            document.getElementById('news-edit-id').value = '';
+            document.getElementById('news-title-input').value = '';
+            document.getElementById('news-date-input').value = '';
+            document.getElementById('news-img-input').value = '';
+            document.getElementById('news-video-input').value = '';
+            document.getElementById('news-summary-input').value = '';
+            document.getElementById('news-full-input').value = '';
+            document.getElementById('news-form-title').innerText = 'Додати новину';
+        }
+
+        function deleteNews(id) {
+            newsData = newsData.filter(n => n.id !== id);
+            localStorage.setItem('kram_news_v2', JSON.stringify(newsData));
+            renderNews();
+            showAlert('Видалено', 'Новину було видалено з бази.');
+        }
+
+        function openAddAnnouncement() {
+            document.getElementById('anc-edit-id').value = '';
+            document.getElementById('anc-tag-input').value = '';
+            document.getElementById('anc-title-input').value = '';
+            document.getElementById('anc-text-input').value = '';
+            openModal('add-announcement-modal');
+        }
+
+        function saveAnnouncement(e) {
+            e.preventDefault();
+            const editId = document.getElementById('anc-edit-id').value;
+            const tag = document.getElementById('anc-tag-input').value;
+            const title = document.getElementById('anc-title-input').value;
+            const text = document.getElementById('anc-text-input').value;
+
+            if (editId) {
+                const idx = announcementsData.findIndex(a => a.id === parseInt(editId));
+                if (idx !== -1) announcementsData[idx] = { id: parseInt(editId), tag, title, text };
+            } else {
+                announcementsData.unshift({ id: Date.now(), tag, title, text });
+            }
+            localStorage.setItem('kram_announcements_v2', JSON.stringify(announcementsData));
+            renderAnnouncements();
+            closeModal('add-announcement-modal');
+            showAlert('Успіх', 'Оголошення збережено!');
+        }
+
+        function editAnnouncement(id) {
+            const item = announcementsData.find(a => a.id === id);
+            if (!item) return;
+            document.getElementById('anc-edit-id').value = item.id;
+            document.getElementById('anc-tag-input').value = item.tag;
+            document.getElementById('anc-title-input').value = item.title;
+            document.getElementById('anc-text-input').value = item.text;
+            openModal('add-announcement-modal');
+        }
+
+        function deleteAnnouncement(id) {
+            announcementsData = announcementsData.filter(a => a.id !== id);
+            localStorage.setItem('kram_announcements_v2', JSON.stringify(announcementsData));
+            renderAnnouncements();
+            showAlert('Видалено', 'Оголошення видалено.');
+        }
+
+        function saveTab(e) {
+            e.preventDefault();
+            const editId = document.getElementById('tab-edit-id').value;
+            const title = document.getElementById('tab-title-input').value;
+            const content = document.getElementById('tab-content-input').value;
+
+            if (editId) {
+                const idx = tabsData.findIndex(t => t.id === editId);
+                if (idx !== -1) { tabsData[idx].title = title; tabsData[idx].content = content; }
+            } else {
+                const newId = 'tab-custom-' + Date.now();
+                tabsData.push({ id: newId, title, content });
+                activeTabId = newId;
+            }
+            localStorage.setItem('kram_tabs_v2', JSON.stringify(tabsData));
+            renderTabs();
+            resetTabForm();
+            showAlert('Збережено', 'Вкладку успішно оновлено!');
+        }
+
+        function editTab(id) {
+            const tab = tabsData.find(t => t.id === id);
+            if (!tab) return;
+            document.getElementById('tab-edit-id').value = tab.id;
+            document.getElementById('tab-title-input').value = tab.title;
+            document.getElementById('tab-content-input').value = tab.content;
+            document.getElementById('tab-form-label').innerText = 'Редагувати вкладку';
+        }
+
+        function deleteTab(id) {
+            if(tabsData.length <= 1) {
+                showAlert('Помилка', 'Неможливо видалити останню вкладку!', false);
+                return;
+            }
+            tabsData = tabsData.filter(t => t.id !== id);
+            localStorage.setItem('kram_tabs_v2', JSON.stringify(tabsData));
+            renderTabs();
+            showAlert('Видалено', 'Вкладку було видалено.');
+        }
+
+        function resetTabForm() {
+            document.getElementById('tab-edit-id').value = '';
+            document.getElementById('tab-title-input').value = '';
+            document.getElementById('tab-content-input').value = '';
+            document.getElementById('tab-form-label').innerText = 'Додати нову вкладку';
+        }
+
+        function saveNavItem(e) {
+            e.preventDefault();
+            const editId = document.getElementById('nav-edit-id').value;
+            const title = document.getElementById('nav-title-input').value;
+            const link = document.getElementById('nav-link-input').value;
+            const icon = document.getElementById('nav-icon-input').value;
+            const isExternal = document.getElementById('nav-external-input').checked;
+
+            if (editId) {
+                const idx = navData.findIndex(n => n.id === parseInt(editId));
+                if (idx !== -1) navData[idx] = { id: parseInt(editId), title, link, icon, isExternal };
+            } else {
+                navData.push({ id: Date.now(), title, link, icon, isExternal });
+            }
+            localStorage.setItem('kram_nav_v2', JSON.stringify(navData));
+            renderNav();
+            resetNavForm();
+            showAlert('Збережено', 'Пункт меню збережено!');
+        }
+
+        function editNavItem(id) {
+            const nav = navData.find(n => n.id === id);
+            if (!nav) return;
+            document.getElementById('nav-edit-id').value = nav.id;
+            document.getElementById('nav-title-input').value = nav.title;
+            document.getElementById('nav-link-input').value = nav.link;
+            document.getElementById('nav-icon-input').value = nav.icon || '';
+            document.getElementById('nav-external-input').checked = !!nav.isExternal;
+            document.getElementById('nav-form-label').innerText = 'Редагувати пункт меню';
+        }
+
+        function deleteNavItem(id) {
+            navData = navData.filter(n => n.id !== id);
+            localStorage.setItem('kram_nav_v2', JSON.stringify(navData));
+            renderNav();
+            showAlert('Видалено', 'Пункт меню видалено.');
+        }
+
+        function resetNavForm() {
+            document.getElementById('nav-edit-id').value = '';
+            document.getElementById('nav-title-input').value = '';
+            document.getElementById('nav-link-input').value = '';
+            document.getElementById('nav-icon-input').value = '';
+            document.getElementById('nav-external-input').checked = false;
+            document.getElementById('nav-form-label').innerText = 'Додати пункт меню';
+        }
+
+        function saveOfficialLink(e) {
+            e.preventDefault();
+            const editId = document.getElementById('link-edit-id').value;
+            const title = document.getElementById('link-title-input').value;
+            const sub = document.getElementById('link-sub-input').value;
+            const url = document.getElementById('link-url-input').value;
+            const icon = document.getElementById('link-icon-input').value;
+
+            if (editId) {
+                const idx = linksData.findIndex(l => l.id === parseInt(editId));
+                if (idx !== -1) linksData[idx] = { id: parseInt(editId), title, sub, url, icon };
+            } else {
+                linksData.push({ id: Date.now(), title, sub, url, icon });
+            }
+            localStorage.setItem('kram_links_v2', JSON.stringify(linksData));
+            renderOfficialLinks();
+            resetLinkForm();
+            showAlert('Збережено', 'Офіційний ресурс збережено!');
+        }
+
+        function editOfficialLink(id) {
+            const item = linksData.find(l => l.id === id);
+            if (!item) return;
+            document.getElementById('link-edit-id').value = item.id;
+            document.getElementById('link-title-input').value = item.title;
+            document.getElementById('link-sub-input').value = item.sub;
+            document.getElementById('link-url-input').value = item.url;
+            document.getElementById('link-icon-input').value = item.icon;
+            document.getElementById('link-form-label').innerText = 'Редагувати ресурс';
+        }
+
+        function deleteOfficialLink(id) {
+            linksData = linksData.filter(l => l.id !== id);
+            localStorage.setItem('kram_links_v2', JSON.stringify(linksData));
+            renderOfficialLinks();
+            showAlert('Видалено', 'Ресурс видалено.');
+        }
+
+        function resetLinkForm() {
+            document.getElementById('link-edit-id').value = '';
+            document.getElementById('link-title-input').value = '';
+            document.getElementById('link-sub-input').value = '';
+            document.getElementById('link-url-input').value = '';
+            document.getElementById('link-icon-input').value = '';
+            document.getElementById('link-form-label').innerText = 'Додати ресурс';
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim();
+            const p = document.getElementById('login-password').value.trim();
+
+            if (u === adminAuth.user && p === adminAuth.pass) {
+                adminAuth.loggedIn = true;
+                localStorage.setItem('kram_admin_auth', JSON.stringify(adminAuth));
+                checkAdminStatus();
+                closeModal('admin-login-modal');
+                renderNews();
+                renderAnnouncements();
+                showAlert('Ласкаво просимо', `Ви успішно авторизувались як ${adminAuth.user}!`);
+            } else {
+                showAlert('Помилка входу', 'Невірний логін або пароль!', false);
+            }
+        }
+
+        function logoutAdmin() {
+            adminAuth.loggedIn = false;
+            localStorage.setItem('kram_admin_auth', JSON.stringify(adminAuth));
+            checkAdminStatus();
+            renderNews();
+            renderAnnouncements();
+            showAlert('Вихід виконано', 'Ви вийшли з адміністративної панелі.');
+        }
+
+        function checkAdminStatus() {
+            const adminBar = document.getElementById('admin-bar');
+            const loginBtnHeader = document.getElementById('login-btn-header');
+            const userDisplay = document.getElementById('admin-user-display');
+            const adminOnlyElements = document.querySelectorAll('.admin-only');
+
+            if (adminAuth.loggedIn) {
+                adminBar.classList.remove('hidden');
+                if(userDisplay) userDisplay.innerText = adminAuth.user;
+                if(loginBtnHeader) {
+                    loginBtnHeader.innerHTML = '<i class="fa-solid fa-user-check mr-1 text-emerald-400"></i> Адмін панель';
+                    loginBtnHeader.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                adminOnlyElements.forEach(el => el.classList.remove('hidden'));
+            } else {
+                adminBar.classList.add('hidden');
+                if(loginBtnHeader) {
+                    loginBtnHeader.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> Вхід для адміна';
+                    loginBtnHeader.onclick = () => openModal('admin-login-modal');
+                }
+                adminOnlyElements.forEach(el => el.classList.add('hidden'));
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function toggleAccessibilityPanel() {
+            document.getElementById('accessibility-panel').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

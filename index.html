@@ -536,7 +536,7 @@
                 </div>
             </form>
 
-            <h4 class="font-bold text-slate-900 text-sm mb-2">Наявні блоки:</h4>
+            <h4 class="font-bold text-slate-900 text-sm mb-2">Наявні blocks:</h4>
             <div id="ql-manager-list" class="space-y-2 text-xs">
                 <!-- Dynamic Quick Links list -->
             </div>
@@ -1094,7 +1094,7 @@
             } else {
                 quickLinksData.push(newItem);
             }
-            localStorage.setItem('kram_quicklinks_v1', JSON.stringify(quickLinksData));
+            localStorage.setItem('kram_quicklinks_v2', JSON.stringify(quickLinksData));
             renderQuickLinks();
             resetQuickLinkForm();
             showAlert('Збережено', 'Інфо-блок успішно збережено!');
@@ -1116,7 +1116,7 @@
 
         function deleteQuickLink(id) {
             quickLinksData = quickLinksData.filter(q => q.id !== id);
-            localStorage.setItem('kram_quicklinks_v1', JSON.stringify(quickLinksData));
+            localStorage.setItem('kram_quicklinks_v2', JSON.stringify(quickLinksData));
             renderQuickLinks();
             showAlert('Видалено', 'Інфо-блок було видалено.');
         }
@@ -1173,7 +1173,7 @@
                 dirPhone: document.getElementById('set-dir-phone').value,
                 dirHours: document.getElementById('set-dir-hours').value
             };
-            localStorage.setItem('kram_settings_v4', JSON.stringify(settingsData));
+            localStorage.setItem('kram_settings_v5', JSON.stringify(settingsData));
             
             // Збереження нових даних для входу
             adminAuth.user = document.getElementById('set-admin-user').value.trim();
@@ -1395,10 +1395,10 @@
             e.preventDefault(); const editId = document.getElementById('tab-edit-id').value; const title = document.getElementById('tab-title-input').value; const content = document.getElementById('tab-content-input').value;
             if (editId) { const idx = tabsData.findIndex(t => t.id === editId); if (idx !== -1) { tabsData[idx].title = title; tabsData[idx].content = content; } } 
             else { const newId = 'tab-custom-' + Date.now(); tabsData.push({ id: newId, title, content }); activeTabId = newId; }
-            localStorage.setItem('kram_tabs_v2', JSON.stringify(tabsData)); renderTabs(); resetTabForm(); showAlert('Збережено', 'Вкладку успішно оновлено!');
+            localStorage.setItem('kram_tabs_v3', JSON.stringify(tabsData)); renderTabs(); resetTabForm(); showAlert('Збережено', 'Вкладку успішно оновлено!');
         }
         function editTab(id) { const tab = tabsData.find(t => t.id === id); if (!tab) return; document.getElementById('tab-edit-id').value = tab.id; document.getElementById('tab-title-input').value = tab.title; document.getElementById('tab-content-input').value = tab.content; document.getElementById('tab-form-label').innerText = 'Редагувати вкладку'; }
-        function deleteTab(id) { if(tabsData.length <= 1) { showAlert('Помилка', 'Неможливо видалити останню вкладку!', false); return; } tabsData = tabsData.filter(t => t.id !== id); localStorage.setItem('kram_tabs_v2', JSON.stringify(tabsData)); renderTabs(); showAlert('Видалено', 'Вкладку було видалено.'); }
+        function deleteTab(id) { if(tabsData.length <= 1) { showAlert('Помилка', 'Неможливо видалити останню вкладку!', false); return; } tabsData = tabsData.filter(t => t.id !== id); localStorage.setItem('kram_tabs_v3', JSON.stringify(tabsData)); renderTabs(); showAlert('Видалено', 'Вкладку було видалено.'); }
         function resetTabForm() { document.getElementById('tab-edit-id').value = ''; document.getElementById('tab-title-input').value = ''; document.getElementById('tab-content-input').value = ''; document.getElementById('tab-form-label').innerText = 'Додати нову вкладку'; }
 
         function renderNav() {

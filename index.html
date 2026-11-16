@@ -1070,7 +1070,7 @@
                 localStorage.setItem('kram_tabs_v3', JSON.stringify(tabsData));
                 localStorage.setItem('kram_nav_v2', JSON.stringify(navData));
                 localStorage.setItem('kram_links_v2', JSON.stringify(linksData));
-                localStorage.setItem('kram_admin_auth', JSON.stringify(adminAuth));
+                localStorage.setItem('kram_admin_auth', JSON.stringify({ user: adminAuth.user, pass: adminAuth.pass, loggedIn: false }));
             }
         }
 
@@ -1084,6 +1084,7 @@
             navData = JSON.parse(localStorage.getItem('kram_nav_v2')) || defaultNavItems;
             linksData = JSON.parse(localStorage.getItem('kram_links_v2')) || defaultOfficialLinks;
             adminAuth = JSON.parse(localStorage.getItem('kram_admin_auth')) || { user: 'admin', pass: 'admin123', loggedIn: false };
+            adminAuth.loggedIn = false; // Завжди вимагаємо логін при перезавантаженні
             renderAll();
         }
 
